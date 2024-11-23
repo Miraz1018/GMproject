@@ -1,0 +1,149 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ *
+ * @author User
+ */
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Base Class
+class Garment {
+    private int id;
+    private String name;
+    private double price;
+
+    public Garment(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    // Getters and setters (Encapsulation)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + id + ", Name: " + name + ", Price: $" + price;
+    }
+}
+
+
+public class GarmentManagement {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        GarmentManager manager = new GarmentManager();
+
+        while (true) {
+            System.out.println("\nGarment Management System:");
+            System.out.println("1. Add Garment");
+            System.out.println("2. View Garments");
+            System.out.println("3. Delete Garment");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = -1;
+            try {
+                choice = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Error: Please enter a valid number.");
+                scanner.nextLine(); // Clear the invalid input
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine(); // Consume newline
+                    System.out.print("Enter Name: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Enter Price: ");
+                    double price = scanner.nextDouble();
+                    manager.addGarment(new Garment(id, name, price));
+                    break;
+
+                case 2:
+                    manager.viewGarments();
+                    break;
+
+                case 3:
+                    System.out.print("Enter ID to delete: ");
+                    int delId = scanner.nextInt();
+                    manager.deleteGarment(delId);
+                    break;
+
+                case 4:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Error: Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+
+
+class GarmentManager {
+    private ArrayList<Garment> garments = new ArrayList<>();
+
+    // Add Garment
+    public void addGarment(Garment garment) {
+        for (Garment g : garments) {
+            if (g.getId() == garment.getId()) {
+                System.out.println("Error: Garment with ID " + garment.getId() + " already exists.");
+                return;
+            }
+        }
+        garments.add(garment);
+        System.out.println("Garment added: " + garment.getName());
+    }
+
+    // View Garments
+    public void viewGarments() {
+        if (garments.isEmpty()) {
+            System.out.println("No garments available.");
+            return;
+        }
+        System.out.println("Garments List:");
+        for (Garment g : garments) {
+            System.out.println(g);
+        }
+    }
+
+    // Delete Garment
+    public void deleteGarment(int id) {
+        boolean found = garments.removeIf(g -> g.getId() == id);
+        if (found) {
+            System.out.println("Garment with ID " + id + " removed.");
+        } else {
+            System.out.println("Error: Garment with ID " + id + " not found.");
+        }
+    }
+}
